@@ -56,6 +56,7 @@ function Races() {
         id = content ? content[i].id : '';
 
         const startMatch = [];
+        
         if ((auth ? auth.success : false) && auth.username === content[i].owner)
             startMatch.push(<Button variant="primary" onClick={() => {launchMatch(content[i].id)}}>Starten</Button>)
 

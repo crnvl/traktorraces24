@@ -1,5 +1,5 @@
 {
     "serverPort": 9001,
-    "serverDomain": "http://localhost:9001",
-    "siteDomain": "http://localhost:3000"
+    "serverDomain": "https://races.4c3711.xyz",
+    "siteDomain": "https://traktorraces24.4c3711.xyz"
 }

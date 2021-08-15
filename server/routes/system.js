@@ -3,6 +3,8 @@ const sessions = require('../sessions.json');
 const fs = require('fs/promises');
 const makeId = require('../utils/sessionKeyGen');
 
+//this route is deprecated, we now use V2
+
 const systemRouter = function (app) {
     app.get('/', (req, res) => {
         res.json({

@@ -16,8 +16,8 @@ app.use(function (req, res, next) {
     next();
 });
 
-require('./routes/system.js')(app);
-require('./routes/matchmaking.js')(app);
+require('./routes/matchmakingV2.js')(app);
+require('./routes/systemV2.js')(app);
 
 
 app.listen(9001, function () {
