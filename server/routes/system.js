@@ -76,6 +76,7 @@ const systemRouter = function (app) {
                     console.log('saved sessionKey')
                     console.log(sessions)
                 })
+                return;
             }
         }
 

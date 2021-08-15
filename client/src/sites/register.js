@@ -19,6 +19,11 @@ function createAccount() {
         return;
     }
 
+    if(!username.match("^[A-Za-z0-9]")){
+        alert('Nutzername darf nur Zahlen und Buchstaben enthalten.')
+        return;
+    }
+
     (async () => {
         const rawResponse = await fetch(`${settings.serverDomain}/register`, {
             method: 'POST',
@@ -62,7 +67,7 @@ function Register() {
                 <div className="col-lg-4 mx-auto">
                     <Form onSubmit={handleSubmit}>
                         <Form.Group className="mb-3" controlId="formBasicUsername">
-                            <Form.Label>Username</Form.Label>
+                            <Form.Label>Nutzername</Form.Label>
                             <Form.Control type="username" placeholder="joeMama69" id="input-username" />
                         </Form.Group>
                         <Form.Group className="mb-3" controlId="formBasicEmail">

@@ -1,5 +1,0 @@
-{
-    "serverPort": 9001,
-    "serverDomain": "http://localhost:9001",
-    "siteDomain": "http://localhost:3000"
-}

@@ -32,9 +32,9 @@ function Account(props) {
         <>
             <Header username={username}></Header>
             <div className="container">
-                <div className="col-xxl-9 mx-auto">
-                    <Card >
-                        <Card.Img variant="top" src={content ? content.avatar : '/images/menu/carousel3.jpg'} style={{height: '100%', width: '500px', display: 'block', marginLeft: 'auto', marginRight: 'auto'}}/>
+                <div className="col-lg mx-auto">
+                    <Card>
+                        <Card.Img variant="top" src={content ? content.avatar : '/images/menu/carousel3.jpg'} style={{ height: '300px', width: '100%', display: 'block', marginLeft: 'auto', marginRight: 'auto', objectFit: 'cover', overflow: 'hidden' }} />
                         <Card.Body>
                             <Card.Title>@{content ? content.username : ''}</Card.Title>
                             <Card.Text>
