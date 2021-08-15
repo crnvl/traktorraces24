@@ -47,7 +47,6 @@ function Login() {
 
     var handleSubmit = (e) => {
         e.preventDefault();
-        console.log('Event: Form Submit');
     };
 
     return (

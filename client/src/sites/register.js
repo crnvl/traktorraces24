@@ -14,7 +14,7 @@ function createAccount() {
         return;
     }
 
-    if(username.includes(' ')) {
+    if (username.includes(' ')) {
         alert('Nutzername darf keine leerzeichen enthalten.')
         return;
     }
@@ -50,10 +50,10 @@ function Register() {
     let username = localStorage.getItem('username');
     if (username === null)
         username = '';
-        var handleSubmit = (e) => {
-            e.preventDefault();
-            console.log('Event: Form Submit');
-        };
+
+    var handleSubmit = (e) => {
+        e.preventDefault();
+    };
 
     return (
         <>
