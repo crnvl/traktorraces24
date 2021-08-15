@@ -1,6 +1,6 @@
 const users = require('../users.json');
 const sessions = require('../sessions.json');
-var fs = require('fs')
+const fs = require('fs/promises');
 const makeId = require('../utils/sessionKeyGen');
 
 const systemRouter = function (app) {
@@ -72,7 +72,7 @@ const systemRouter = function (app) {
                     "sessionKey": sessionKey
                 })
 
-                fs.writeFile("./sessions.json", JSON.stringify(sessions), () => {
+                fs.writeFile("./sessions.json", JSON.stringify(sessions)).then(() => {
                     console.log('saved sessionKey')
                     console.log(sessions)
                 })
@@ -163,7 +163,7 @@ const systemRouter = function (app) {
                             users[x].description = users[x].description
                         }
 
-                        fs.writeFileSync("./users.json", JSON.stringify(users));
+                        fs.writeFile("./users.json", JSON.stringify(users));
                         res.json({
                             "success": true,
                             "message": "details changed"
@@ -193,7 +193,7 @@ const systemRouter = function (app) {
                 })
                 return;
             }
-        } 
+        }
 
         res.json({
             "success": false,
