@@ -21,7 +21,7 @@ function Races() {
 
     useEffect(() => {
         async function fetchSettings() {
-            const response = await fetch(`${serverDomain}:${serverPort}/matches`, {
+            const response = await fetch(`${serverDomain}/matches`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json'
@@ -38,7 +38,7 @@ function Races() {
 
     useEffect(() => {
         async function fetchSettings() {
-            const response = await fetch(`${serverDomain}:${serverPort}/confirmIdentity?sessionToken=${localStorage.getItem('sessionToken')}`, {
+            const response = await fetch(`${serverDomain}/confirmIdentity?sessionToken=${localStorage.getItem('sessionToken')}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json'
@@ -140,7 +140,7 @@ function createMatch() {
             return;
         }
 
-        fetch(`${settings.serverDomain}:${settings.serverPort}/matches/create`, {
+        fetch(`${settings.serverDomain}/matches/create`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -162,7 +162,7 @@ function createMatch() {
 
 function joinMatch() {
     (async () => {
-        const rawResponse = await fetch(`${settings.serverDomain}:${settings.serverPort}/match/join`, {
+        const rawResponse = await fetch(`${settings.serverDomain}/match/join`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -176,7 +176,7 @@ function joinMatch() {
 
         if (content.success) {
             alert('Sie wurden erfolgreich eingetragen!')
-            window.location.replace(`${settings.siteDomain}/traktorraces24/races`);
+            window.location.replace(`${settings.siteDomain}/races`);
         } else {
             alert('Du bist bereits eingetragen.')
         }
@@ -185,7 +185,7 @@ function joinMatch() {
 
 function launchMatch(matchId) {
     (async () => {
-        const rawResponse = await fetch(`${settings.serverDomain}:${settings.serverPort}/match/start`, {
+        const rawResponse = await fetch(`${settings.serverDomain}/match/start`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -201,7 +201,7 @@ function launchMatch(matchId) {
 
         if (content.success) {
             alert('Der Wettbewerb wurde erfolgreich beendet!')
-            window.location.replace(`${settings.siteDomain}/traktorraces24/races`);
+            window.location.replace(`${settings.siteDomain}/races`);
         } else {
             alert('Irgendetwas ist schiefgelaufen. Bitte versuche es spaeter erneut.')
         }

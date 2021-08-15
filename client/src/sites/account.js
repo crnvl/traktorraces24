@@ -18,7 +18,7 @@ function Account(props) {
 
     useEffect(() => {
         async function fetchSettings() {
-            const response = await fetch(`${serverDomain}:${serverPort}/user/${user}`, {
+            const response = await fetch(`${serverDomain}/user/${user}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json'

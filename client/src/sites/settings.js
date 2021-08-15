@@ -13,7 +13,7 @@ function saveSettings() {
     const sessionToken = localStorage.getItem('sessionToken');
 
     (async () => {
-        const rawResponse = await fetch(`${settings.serverDomain}:${settings.serverPort}/@me/settings`, {
+        const rawResponse = await fetch(`${settings.serverDomain}/@me/settings`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -29,7 +29,7 @@ function saveSettings() {
         if (content.success) {
             alert('Einstellungen erfolgreich gespeichert!')
             localStorage.removeItem('credits');
-            window.location.replace(`${settings.siteDomain}/traktorraces24/account/settings`);
+            window.location.replace(`${settings.siteDomain}/account/settings`);
         } else {
             alert('Oops, irgendetwas ist schiefgelaufen.')
         }
@@ -47,7 +47,7 @@ function addCredits() {
     }
 
     (async () => {
-        const rawResponse = await fetch(`${settings.serverDomain}:${settings.serverPort}/@me/settings`, {
+        const rawResponse = await fetch(`${settings.serverDomain}/@me/settings`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -62,7 +62,7 @@ function addCredits() {
         if (content.success) {
             alert('Credits hinzugefuegt!')
             localStorage.removeItem('credits');
-            window.location.replace(`${settings.siteDomain}/traktorraces24/account/settings`);
+            window.location.replace(`${settings.siteDomain}/account/settings`);
         } else {
             alert('Oops, irgendetwas ist schiefgelaufen.')
         }
@@ -80,7 +80,7 @@ function Settings() {
 
     useEffect(() => {
         async function fetchSettings() {
-            const response = await fetch(`${serverDomain}:${serverPort}/@me/settings?sessionToken=${sessionToken}`, {
+            const response = await fetch(`${serverDomain}/@me/settings?sessionToken=${sessionToken}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json'

@@ -1,28 +1,14 @@
 import 'bootstrap/dist/css/bootstrap.min.css'
 import React from 'react';
-import { Route, HashRouter as Router, Switch } from 'react-router-dom'
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
-import Account from './sites/account.js'
-import Settings from './sites/settings';
-import Login from './sites/login';
 import reportWebVitals from './reportWebVitals';
-import Register from './sites/register';
-import Races from './sites/races';
+import './App.css';
+import App from './App';
 
 ReactDOM.render(
   <React.StrictMode>
-    <Router>
-      <Switch>
-        <Route path='/' component={App}/>
-        <Route path='/user/:user' component={Account}/>
-        <Route path='/account/settings' component={Settings}/>
-        <Route path='/login' component={Login}/>
-        <Route path='/register' component={Register}/>
-        <Route path='/races' component={Races}/>
-      </Switch>
-    </Router>
+    <App></App>
   </React.StrictMode>,
   document.getElementById('root')
 );

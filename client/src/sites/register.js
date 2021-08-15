@@ -20,7 +20,7 @@ function createAccount() {
     }
 
     (async () => {
-        const rawResponse = await fetch(`${settings.serverDomain}:${settings.serverPort}/register`, {
+        const rawResponse = await fetch(`${settings.serverDomain}/register`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -35,7 +35,7 @@ function createAccount() {
 
         if (content.success) {
             alert('Sie haben ihr Konto erfolgreich registriert!')
-            window.location.replace(`${settings.siteDomain}/traktorraces24/login`);
+            window.location.replace(`${settings.siteDomain}/login`);
         } else {
             if (content.message === 'already registered')
                 alert('Diese Anmeldedaten werden bereits verwendet.')

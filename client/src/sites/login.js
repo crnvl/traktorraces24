@@ -12,7 +12,7 @@ function sendLogin() {
     }
 
     (async () => {
-        const rawResponse = await fetch(`${settings.serverDomain}:${settings.serverPort}/login`, {
+        const rawResponse = await fetch(`${settings.serverDomain}/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
