@@ -62,7 +62,7 @@ function Races() {
         const participators = [];
         for (let x = 0; x < (content ? content[i].players.length : 0); x++) {
             participators.push(
-                <><b>{content[i].players[x]}</b><br></br></>
+                <><b><a href={`/user/${content[i].players[x]}`}>{content[i].players[x]}</a></b><br></br></>
             )
         }
 

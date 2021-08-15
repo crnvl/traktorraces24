@@ -6,7 +6,7 @@ app.use(express.json())
 
 const productionDomain = 'https://4c3711.xyz';
 const testingDomain = 'http://localhost:3000';
-const domain = productionDomain;
+const domain = testingDomain;
 
 // Add headers before the routes are defined
 app.use(function (req, res, next) {
