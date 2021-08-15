@@ -1,4 +1,4 @@
-var fs = require('fs');
+const fs = require('fs/promises');
 const users = require('../users.json');
 const sessions = require('../sessions.json');
 const matches = require('../matches.json');
@@ -30,7 +30,7 @@ const multiplayer = function (app) {
             "id": makeId(5)
         })
 
-        fs.writeFileSync("./matches.json", JSON.stringify(matches));
+        fs.writeFile("./matches.json", JSON.stringify(matches));
         res.json({
             "name": body.name,
             "description": body.description,
@@ -70,8 +70,8 @@ const multiplayer = function (app) {
                             }
                         }
 
-                        fs.writeFileSync("./users.json", JSON.stringify(users));
-                        fs.writeFileSync("./matches.json", JSON.stringify(matches));
+                        fs.writeFile("./users.json", JSON.stringify(users));
+                        fs.writeFile("./matches.json", JSON.stringify(matches));
 
                         res.json({
                             success: true,
@@ -120,9 +120,9 @@ const multiplayer = function (app) {
                             }
                         }
 
-                        fs.writeFileSync("./users.json", JSON.stringify(users));
+                        fs.writeFile("./users.json", JSON.stringify(users));
 
-                        fs.writeFileSync("./matches.json", JSON.stringify(matches));
+                        fs.writeFile("./matches.json", JSON.stringify(matches));
 
                         res.json({
                             success: true,
@@ -181,8 +181,8 @@ const multiplayer = function (app) {
 
                         matches[x].isPrivate = true
 
-                        fs.writeFileSync("./users.json", JSON.stringify(users));
-                        fs.writeFileSync("./matches.json", JSON.stringify(matches));
+                        fs.writeFile("./users.json", JSON.stringify(users));
+                        fs.writeFile("./matches.json", JSON.stringify(matches));
 
                         res.json({
                             winner: players[winner],
