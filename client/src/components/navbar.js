@@ -30,7 +30,7 @@ function Header(props) {
                                 <NavDropdown.Item href="/races">Wettbewerbe ansehen</NavDropdown.Item>
                                 <NavDropdown.Divider/>
                             </>}
-                            <NavDropdown.Item href={username ? "/do?=logout" : "/login"}>{username ? "Ausloggen" : "Einloggen"}</NavDropdown.Item>
+                            <NavDropdown.Item href={username ? "/?do=logout" : "/login"}>{username ? "Ausloggen" : "Einloggen"}</NavDropdown.Item>
                         </NavDropdown>
                     </Nav>
                 </Navbar.Collapse>
