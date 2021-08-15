@@ -1,7 +1,5 @@
 import Header from "../components/navbar";
 import Card from 'react-bootstrap/Card';
-import NavDropdown from 'react-bootstrap/NavDropdown';
-import ListGroup from 'react-bootstrap/ListGroup';
 import { useEffect, useState } from "react";
 import { useParams } from 'react-router-dom'
 const settings = require('../api/settings.json');
@@ -36,7 +34,7 @@ function Account(props) {
             <div className="container">
                 <div className="col-xxl-9 mx-auto">
                     <Card >
-                        <Card.Img variant="top" src={content ? content.avatar : '/images/menu/carousel3.jpg'} />
+                        <Card.Img variant="top" src={content ? content.avatar : '/images/menu/carousel3.jpg'} style={{height: '100%', width: '500px', display: 'block', marginLeft: 'auto', marginRight: 'auto'}}/>
                         <Card.Body>
                             <Card.Title>@{content ? content.username : ''}</Card.Title>
                             <Card.Text>
