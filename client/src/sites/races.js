@@ -6,13 +6,18 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 const settings = require('../api/settings.json');
-var id;
 
 function Races() {
 
     const username = localStorage.getItem('username') || '';
 
     const listOfMatches = [];
+
+    //show play box
+    const [showGame, setShowGame] = useState(false);
+
+    const handleCloseGame = () => setShowGame(false);
+    const handleShowGame = () => setShowGame(true);
 
     const [content, setContent] = useState(undefined);
 
@@ -52,21 +57,28 @@ function Races() {
 
     for (let i = 0; i < (content ? content.length : 0); i++) {
 
-        
-        id = content ? content[i].id : '';
+
+        const id = content ? content[i].id : '';
 
         const startMatch = [];
-        
+
         if ((auth ? auth.success : false) && auth.username === content[i].owner)
-            startMatch.push(<Button variant="primary" onClick={() => {launchMatch(content[i].id)}}>Starten</Button>)
+            startMatch.push(<Button variant="primary" onClick={() => { launchMatch(content[i].id); }}>Starten</Button>)
 
         const participators = [];
+        const playMatchButton = [];
         for (let x = 0; x < (content ? content[i].players.length : 0); x++) {
+
+            if (content[i].players[x] === localStorage.getItem('username')) {
+                playMatchButton.push(<Button variant="primary" onClick={() => { handleShowGame(); localStorage.setItem('matchId', content[i].id) }}>
+                    Spielen
+                </Button>)
+            }
+
             participators.push(
                 <><b><a href={`/user/${content[i].players[x]}`}>{content[i].players[x]}</a></b><br></br></>
             )
         }
-
 
         listOfMatches.push(
             <Card>
@@ -82,9 +94,10 @@ function Races() {
                         <h5>Teilnehmer</h5>
                         {participators}
                     </Card.Text>
+                    {playMatchButton}
                     {startMatch}
                 </Card.Body>
-                <Button variant="primary" onClick={joinMatch}>Teilnehmen</Button>
+                <Button variant="primary" onClick={() => { joinMatch(id) }}>Teilnehmen</Button>
             </Card>
         )
     }
@@ -115,6 +128,27 @@ function Races() {
                     <Button variant="primary" onClick={createMatch}>
                         Anmelden
                     </Button>
+                </Modal.Footer>
+            </Modal>
+
+            <Modal
+                show={showGame}
+                onHide={handleCloseGame}
+                backdrop="static"
+                keyboard={false}
+            >
+                <Modal.Header closeButton>
+                    <Modal.Title>Wettbewerb spielen</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    Druecken sie die Leertaste um zu starten. Sie haben nur einen Versuch.<br></br>
+                    {<iframe src={`https://4c3711.xyz/game?sessionKey=${localStorage.getItem('sessionToken')}&matchId=${localStorage.getItem('matchId')}`} title="Traktorspiel" width="100%" height="230px" scrolling="no" id="game-iframe"></iframe>}
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleCloseGame}>
+                        Abbrechen
+                    </Button>
+                    <Button variant="primary" onClick={handleCloseGame}>Fertig</Button>
                 </Modal.Footer>
             </Modal>
 
@@ -161,7 +195,7 @@ function createMatch() {
     })();
 }
 
-function joinMatch() {
+function joinMatch(id) {
     (async () => {
         const rawResponse = await fetch(`${settings.serverDomain}/match/join`, {
             method: 'POST',
