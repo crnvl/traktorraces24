@@ -1,9 +1,10 @@
-import Header from "../components/navbar";
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button';
+import {useHistory} from 'react-router-dom';
+
 const settings = require('../api/settings.json');
 
-function sendLogin() {
+async function sendLogin(history) {
     const username = document.getElementById('input-username').value;
     const password = document.getElementById('input-password').value;
 
@@ -11,67 +12,56 @@ function sendLogin() {
         alert('Alle Felder muessen ausgefuellt sein.')
     }
 
-    (async () => {
-        const rawResponse = await fetch(`${settings.serverDomain}/login`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                "username": username,
-                "password": password
-            })
-        });
-        const content = await rawResponse.json();
+    const rawResponse = await fetch(`${settings.serverDomain}/login`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            "username": username,
+            "password": password
+        })
+    });
+    const content = await rawResponse.json();
 
-        if (content.success) {
-            alert('Sie haben sich erfolgreich eingeloggt!')
-            localStorage.clear();
+    if (content.success) {
+        alert('Sie haben sich erfolgreich eingeloggt!')
+        localStorage.clear();
 
-            localStorage.setItem('sessionToken', content.sessionKey);
-            localStorage.setItem('username', username);
-            window.location.replace(`${settings.siteDomain}/`);
-        } else {
-            alert('Die angegebenen Daten sind inkorrekt.')
-        }
-        return;
-    })();
-    return
+        localStorage.setItem('sessionToken', content.sessionKey);
+        localStorage.setItem('username', username);
+        history.push('/');
+    } else {
+        alert('Die angegebenen Daten sind inkorrekt.')
+    }
 }
 
 function Login() {
+    const history = useHistory();
 
-    let username = localStorage.getItem('username');
-    if (username === null)
-        username = '';
-
-    var handleSubmit = (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
+        sendLogin(history);
     };
 
     return (
         <>
-            <Header username={username}></Header>
-            <div className="container">
-                <div className="col-lg-4 mx-auto">
-                    <Form onSubmit={handleSubmit}>
-                        <Form.Group className="mb-3" controlId="formBasicEmail">
-                            <Form.Label>Nutzername</Form.Label>
-                            <Form.Control type="username" placeholder="joeMama69" id="input-username" />
-                        </Form.Group>
+            <div className="col-lg-4 mx-auto">
+                <Form onSubmit={handleSubmit}>
+                    <Form.Group className="mb-3" controlId="formBasicEmail">
+                        <Form.Label>Nutzername</Form.Label>
+                        <Form.Control type="username" placeholder="joeMama69" id="input-username"/>
+                    </Form.Group>
 
-                        <Form.Group className="mb-3" controlId="formBasicPassword">
-                            <Form.Label>Passwort</Form.Label>
-                            <Form.Control type="password" placeholder="Passwort" id="input-password" />
-                        </Form.Group>
-                        <Form.Group className="mb-3" controlId="formBasicCheckbox">
-                        </Form.Group>
-                        <Button variant="primary" type="submit" onClick={sendLogin}>
-                            Login
-                        </Button>
-                        <p>Sie besitzen noch kein Konto? Klicken sie <a href="/register">hier</a>!</p>
-                    </Form>
-                </div>
+                    <Form.Group className="mb-3" controlId="formBasicPassword">
+                        <Form.Label>Passwort</Form.Label>
+                        <Form.Control type="password" placeholder="Passwort" id="input-password"/>
+                    </Form.Group>
+                    <Form.Group className="mb-3" controlId="formBasicCheckbox">
+                    </Form.Group>
+                    <Button variant="primary" type="submit">Login</Button>
+                    <p>Sie besitzen noch kein Konto? Klicken sie <a href="/register">hier</a>!</p>
+                </Form>
             </div>
         </>
     )
