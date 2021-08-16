@@ -1,12 +1,9 @@
-import Header from "../components/navbar";
 import Card from 'react-bootstrap/Card';
 import { useEffect, useState } from "react";
 import { useParams } from 'react-router-dom'
 const settings = require('../api/settings.json');
 
-function Account(props) {
-
-    const username = localStorage.getItem('username') || '';
+function Account() {
 
     const [content, setContent] = useState(undefined);
 
@@ -30,7 +27,6 @@ function Account(props) {
 
     return (
         <>
-            <Header username={username}></Header>
             <div className="container">
                 <div className="col-lg mx-auto">
                     <Card>

@@ -1,16 +1,15 @@
 import Header from "../components/navbar";
-import { useEffect, useState } from "react";
+import {useEffect, useState} from "react";
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
+
 const settings = require('../api/settings.json');
 var id;
 
 function Races() {
-
-    const username = localStorage.getItem('username') || '';
 
     const listOfMatches = [];
 
@@ -30,6 +29,7 @@ function Races() {
             const fetchedSettings = await response.json(response);
             setContent(fetchedSettings);
         }
+
         fetchSettings();
     }, [serverDomain, serverPort])
 
@@ -47,18 +47,21 @@ function Races() {
             const fetchedSettings = await response.json(response);
             setAuth(fetchedSettings);
         }
+
         fetchSettings();
     }, [serverDomain, serverPort])
 
     for (let i = 0; i < (content ? content.length : 0); i++) {
 
-        
+
         id = content ? content[i].id : '';
 
         const startMatch = [];
-        
+
         if ((auth ? auth.success : false) && auth.username === content[i].owner)
-            startMatch.push(<Button variant="primary" onClick={() => {launchMatch(content[i].id)}}>Starten</Button>)
+            startMatch.push(<Button variant="primary" onClick={() => {
+                launchMatch(content[i].id)
+            }}>Starten</Button>)
 
         const participators = [];
         for (let x = 0; x < (content ? content[i].players.length : 0); x++) {
@@ -75,10 +78,10 @@ function Races() {
                     <Card.Text>
                         {content ? content[i].description : ''}
                         <br></br>
-                        <NavDropdown.Divider />
+                        <NavDropdown.Divider/>
                         Preisgeld: <b>${content ? content[i].price : ''}</b><br></br>
                         Veranstalter: <b>{content ? content[i].owner : ''}</b><br></br>
-                        <NavDropdown.Divider />
+                        <NavDropdown.Divider/>
                         <h5>Teilnehmer</h5>
                         {participators}
                     </Card.Text>
@@ -96,17 +99,15 @@ function Races() {
 
     return (
         <>
-            <Header username={username}></Header>
-
             <Modal show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
                     <Modal.Title>Wettbewerb anmelden</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>Bitte fuelle die folgenden Informationen aus, um einen Wettbewerb anzumelden!
-                    <NavDropdown.Divider />
-                    <Form.Control type="text" placeholder="Name" id="match-name" /><br></br>
-                    <Form.Control type="text" placeholder="Beschreibung" id="match-desc" /><br></br>
-                    <Form.Control type="text" placeholder="Preisgeld (nur Zahlen)" id="match-creds" /><br></br>
+                    <NavDropdown.Divider/>
+                    <Form.Control type="text" placeholder="Name" id="match-name"/><br></br>
+                    <Form.Control type="text" placeholder="Beschreibung" id="match-desc"/><br></br>
+                    <Form.Control type="text" placeholder="Preisgeld (nur Zahlen)" id="match-creds"/><br></br>
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleClose}>
@@ -118,95 +119,86 @@ function Races() {
                 </Modal.Footer>
             </Modal>
 
-            <div className="container">
-                <div className="col-md mx-auto">
-                    <h2>Aktuelle Wettbewerbe</h2>
-                    <p>Hier koennen sie eine vollstaendige Liste aller aktuellen Wettbewerbe einsehen. Um einem Wettbewerb beizutreten, melden Sie sich bitte an und druecken sie danach auf <b>Teilnehmen</b></p>
-                    <Button variant="success" onClick={handleShow}>Wettbewerb anmelden</Button>
-                    <NavDropdown.Divider />
-                    {listOfMatches}
-                </div>
+            <div className="col-md mx-auto">
+                <h2>Aktuelle Wettbewerbe</h2>
+                <p>Hier koennen sie eine vollstaendige Liste aller aktuellen Wettbewerbe einsehen. Um einem Wettbewerb
+                    beizutreten, melden Sie sich bitte an und druecken sie danach auf <b>Teilnehmen</b></p>
+                <Button variant="success" onClick={handleShow}>Wettbewerb anmelden</Button>
+                <NavDropdown.Divider/>
+                {listOfMatches}
             </div>
         </>
     )
 }
 
-function createMatch() {
-    (async () => {
+async function createMatch() {
+    const price = document.getElementById('match-creds').value;
+    const isValid = /^\d+$/.test(price);
+    if (!isValid) {
+        alert('Guthaben darf nur Zahlen enthalten');
+        return;
+    }
 
-        const price = document.getElementById('match-creds').value;
-        const isValid = /^\d+$/.test(price);
-        if (!isValid) {
-            alert('Guthaben darf nur Zahlen enthalten');
-            return;
-        }
+    await fetch(`${settings.serverDomain}/matches/create`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            "owner": localStorage.getItem('username'),
+            "name": document.getElementById('match-name').value,
+            "description": document.getElementById('match-desc').value,
+            "sessionToken": localStorage.getItem('sessionToken').toString(),
+            "price": `${price}`,
+            "privacy": "false"
+        })
+    });
+    alert('Wettbewerb wurde eingestellt!')
+    window.location.replace(`${settings.siteDomain}/races`);
+}
 
-        fetch(`${settings.serverDomain}/matches/create`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                "owner": localStorage.getItem('username'),
-                "name": document.getElementById('match-name').value,
-                "description": document.getElementById('match-desc').value,
-                "sessionToken": localStorage.getItem('sessionToken').toString(),
-                "price": `${price}`,
-                "privacy": "false"
-            })
-        });
-        alert('Wettbewerb wurde eingestellt!')
+async function joinMatch() {
+    const rawResponse = await fetch(`${settings.serverDomain}/match/join`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            "matchId": id,
+            "sessionToken": localStorage.getItem('sessionToken').toString()
+        })
+    });
+    const content = await rawResponse.json();
+
+    if (content.success) {
+        alert('Sie wurden erfolgreich eingetragen!')
         window.location.replace(`${settings.siteDomain}/races`);
-
-    })();
+    } else {
+        alert('Du bist bereits eingetragen.')
+    }
 }
 
-function joinMatch() {
-    (async () => {
-        const rawResponse = await fetch(`${settings.serverDomain}/match/join`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                "matchId": id,
-                "sessionToken": localStorage.getItem('sessionToken').toString()
-            })
-        });
-        const content = await rawResponse.json();
+async function launchMatch(matchId) {
+    const rawResponse = await fetch(`${settings.serverDomain}/match/start`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            "matchId": matchId,
+            "sessionToken": localStorage.getItem('sessionToken').toString()
+        })
+    });
+    const content = await rawResponse.json();
 
-        if (content.success) {
-            alert('Sie wurden erfolgreich eingetragen!')
-            window.location.replace(`${settings.siteDomain}/races`);
-        } else {
-            alert('Du bist bereits eingetragen.')
-        }
-    })();
-}
+    console.log(content)
 
-function launchMatch(matchId) {
-    (async () => {
-        const rawResponse = await fetch(`${settings.serverDomain}/match/start`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                "matchId": matchId,
-                "sessionToken": localStorage.getItem('sessionToken').toString()
-            })
-        });
-        const content = await rawResponse.json();
-
-        console.log(content)
-
-        if (content.success) {
-            alert('Der Wettbewerb wurde erfolgreich beendet!')
-            window.location.replace(`${settings.siteDomain}/races`);
-        } else {
-            alert('Irgendetwas ist schiefgelaufen. Bitte versuche es spaeter erneut.')
-        }
-    })();
+    if (content.success) {
+        alert('Der Wettbewerb wurde erfolgreich beendet!')
+        window.location.replace(`${settings.siteDomain}/races`);
+    } else {
+        alert('Irgendetwas ist schiefgelaufen. Bitte versuche es spaeter erneut.')
+    }
 }
 
 export default Races;
