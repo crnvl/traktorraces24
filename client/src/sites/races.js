@@ -8,13 +8,16 @@ import Form from 'react-bootstrap/Form';
 import {useHistory} from "react-router-dom";
 
 const settings = require('../api/settings.json');
-var id;
 
 function Races() {
     const listOfMatches = [];
 
     const history = useHistory();
+    //show play box
+    const [showGame, setShowGame] = useState(false);
 
+    const handleCloseGame = () => setShowGame(false);
+    const handleShowGame = () => setShowGame(true);
     const [content, setContent] = useState(undefined);
 
     const serverDomain = settings.serverDomain;
@@ -56,22 +59,27 @@ function Races() {
     for (let i = 0; i < (content ? content.length : 0); i++) {
 
 
-        id = content ? content[i].id : '';
+        const id = content ? content[i].id : '';
 
         const startMatch = [];
 
         if ((auth ? auth.success : false) && auth.username === content[i].owner)
-            startMatch.push(<Button variant="primary" onClick={() => {
-                launchMatch(content[i].id, history)
-            }}>Starten</Button>)
+          startMatch.push(<Button variant="primary" onClick={() => { launchMatch(content[i].id); }}>Starten</Button>)
 
         const participators = [];
+        const playMatchButton = [];
         for (let x = 0; x < (content ? content[i].players.length : 0); x++) {
+
+            if (content[i].players[x] === localStorage.getItem('username')) {
+                playMatchButton.push(<Button variant="primary" onClick={() => { handleShowGame(); localStorage.setItem('matchId', content[i].id) }}>
+                    Spielen
+                </Button>)
+            }
+
             participators.push(
                 <><b><a href={`/user/${content[i].players[x]}`}>{content[i].players[x]}</a></b><br/></>
             )
         }
-
 
         listOfMatches.push(
             <Card>
@@ -87,9 +95,10 @@ function Races() {
                         <h5>Teilnehmer</h5>
                         {participators}
                     </Card.Text>
+                    {playMatchButton}
                     {startMatch}
                 </Card.Body>
-                <Button variant="primary" onClick={() => joinMatch(history)}>Teilnehmen</Button>
+                <Button variant="primary" onClick={() => joinMatch(id, history)}>Teilnehmen</Button>
             </Card>
         )
     }
@@ -120,14 +129,35 @@ function Races() {
                     </Button>
                 </Modal.Footer>
             </Modal>
+            <Modal
+                show={showGame}
+                onHide={handleCloseGame}
+                backdrop="static"
+                keyboard={false}
+            >
+                <Modal.Header closeButton>
+                    <Modal.Title>Wettbewerb spielen</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    Druecken sie die Leertaste um zu starten. Sie haben nur einen Versuch.<br></br>
+                    {<iframe src={`https://4c3711.xyz/game?sessionKey=${localStorage.getItem('sessionToken')}&matchId=${localStorage.getItem('matchId')}`} title="Traktorspiel" width="100%" height="230px" scrolling="no" id="game-iframe"></iframe>}
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleCloseGame}>
+                        Abbrechen
+                    </Button>
+                    <Button variant="primary" onClick={handleCloseGame}>Fertig</Button>
+                </Modal.Footer>
+            </Modal>
 
-            <div className="col-md mx-auto">
-                <h2>Aktuelle Wettbewerbe</h2>
-                <p>Hier koennen sie eine vollstaendige Liste aller aktuellen Wettbewerbe einsehen. Um einem Wettbewerb
-                    beizutreten, melden Sie sich bitte an und druecken sie danach auf <b>Teilnehmen</b></p>
-                <Button variant="success" onClick={handleShow}>Wettbewerb anmelden</Button>
-                <NavDropdown.Divider/>
-                {listOfMatches}
+            <div className="container">
+                <div className="col-md mx-auto">
+                    <h2>Aktuelle Wettbewerbe</h2>
+                    <p>Hier koennen sie eine vollstaendige Liste aller aktuellen Wettbewerbe einsehen. Um einem Wettbewerb beizutreten, melden Sie sich bitte an und druecken sie danach auf <b>Teilnehmen</b></p>
+                    <Button variant="success" onClick={handleShow}>Wettbewerb anmelden</Button>
+                    <NavDropdown.Divider />
+                    {listOfMatches}
+                </div>
             </div>
         </>
     )
@@ -159,7 +189,7 @@ async function createMatch(history) {
     history.push('/races');
 }
 
-async function joinMatch(history) {
+async function joinMatch(id, history) {
     const rawResponse = await fetch(`${settings.serverDomain}/match/join`, {
         method: 'POST',
         headers: {
