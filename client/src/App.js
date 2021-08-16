@@ -11,21 +11,19 @@ function App() {
     const username = localStorage.getItem("username") || '';
 
     return (
-        <>
+        <Router>
             <Header username={username}/>
             <div className="container">
-                <Router>
-                    <Switch>
-                        <Route exact path='/' component={Home}/>
-                        <Route exact path='/user/:user' component={Account}/>
-                        <Route exact path='/account/settings' component={Settings}/>
-                        <Route exact path='/login' component={Login}/>
-                        <Route exact path='/register' component={Register}/>
-                        <Route exact path='/races' component={Races}/>
-                    </Switch>
-                </Router>
+                <Switch>
+                    <Route exact path='/' component={Home}/>
+                    <Route exact path='/user/:user' component={Account}/>
+                    <Route exact path='/account/settings' component={Settings}/>
+                    <Route exact path='/login' component={Login}/>
+                    <Route exact path='/register' component={Register}/>
+                    <Route exact path='/races' component={Races}/>
+                </Switch>
             </div>
-        </>
+        </Router>
     )
 }
 

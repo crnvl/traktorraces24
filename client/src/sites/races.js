@@ -5,13 +5,15 @@ import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
+import {useHistory} from "react-router-dom";
 
 const settings = require('../api/settings.json');
 var id;
 
 function Races() {
-
     const listOfMatches = [];
+
+    const history = useHistory();
 
     const [content, setContent] = useState(undefined);
 
@@ -60,13 +62,13 @@ function Races() {
 
         if ((auth ? auth.success : false) && auth.username === content[i].owner)
             startMatch.push(<Button variant="primary" onClick={() => {
-                launchMatch(content[i].id)
+                launchMatch(content[i].id, history)
             }}>Starten</Button>)
 
         const participators = [];
         for (let x = 0; x < (content ? content[i].players.length : 0); x++) {
             participators.push(
-                <><b><a href={`/user/${content[i].players[x]}`}>{content[i].players[x]}</a></b><br></br></>
+                <><b><a href={`/user/${content[i].players[x]}`}>{content[i].players[x]}</a></b><br/></>
             )
         }
 
@@ -87,7 +89,7 @@ function Races() {
                     </Card.Text>
                     {startMatch}
                 </Card.Body>
-                <Button variant="primary" onClick={joinMatch}>Teilnehmen</Button>
+                <Button variant="primary" onClick={() => joinMatch(history)}>Teilnehmen</Button>
             </Card>
         )
     }
@@ -105,15 +107,15 @@ function Races() {
                 </Modal.Header>
                 <Modal.Body>Bitte fuelle die folgenden Informationen aus, um einen Wettbewerb anzumelden!
                     <NavDropdown.Divider/>
-                    <Form.Control type="text" placeholder="Name" id="match-name"/><br></br>
-                    <Form.Control type="text" placeholder="Beschreibung" id="match-desc"/><br></br>
-                    <Form.Control type="text" placeholder="Preisgeld (nur Zahlen)" id="match-creds"/><br></br>
+                    <Form.Control type="text" placeholder="Name" id="match-name"/><br/>
+                    <Form.Control type="text" placeholder="Beschreibung" id="match-desc"/><br/>
+                    <Form.Control type="text" placeholder="Preisgeld (nur Zahlen)" id="match-creds"/><br/>
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleClose}>
                         Abbrechen
                     </Button>
-                    <Button variant="primary" onClick={createMatch}>
+                    <Button variant="primary" onClick={() => createMatch(history)}>
                         Anmelden
                     </Button>
                 </Modal.Footer>
@@ -131,7 +133,7 @@ function Races() {
     )
 }
 
-async function createMatch() {
+async function createMatch(history) {
     const price = document.getElementById('match-creds').value;
     const isValid = /^\d+$/.test(price);
     if (!isValid) {
@@ -154,10 +156,10 @@ async function createMatch() {
         })
     });
     alert('Wettbewerb wurde eingestellt!')
-    window.location.replace(`${settings.siteDomain}/races`);
+    history.push('/races');
 }
 
-async function joinMatch() {
+async function joinMatch(history) {
     const rawResponse = await fetch(`${settings.serverDomain}/match/join`, {
         method: 'POST',
         headers: {
@@ -172,13 +174,13 @@ async function joinMatch() {
 
     if (content.success) {
         alert('Sie wurden erfolgreich eingetragen!')
-        window.location.replace(`${settings.siteDomain}/races`);
+        history.push('/races');
     } else {
         alert('Du bist bereits eingetragen.')
     }
 }
 
-async function launchMatch(matchId) {
+async function launchMatch(matchId, history) {
     const rawResponse = await fetch(`${settings.serverDomain}/match/start`, {
         method: 'POST',
         headers: {
@@ -195,7 +197,7 @@ async function launchMatch(matchId) {
 
     if (content.success) {
         alert('Der Wettbewerb wurde erfolgreich beendet!')
-        window.location.replace(`${settings.siteDomain}/races`);
+        history.push('/races');
     } else {
         alert('Irgendetwas ist schiefgelaufen. Bitte versuche es spaeter erneut.')
     }

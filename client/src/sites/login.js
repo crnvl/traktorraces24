@@ -1,9 +1,10 @@
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button';
+import {useHistory} from 'react-router-dom';
 
 const settings = require('../api/settings.json');
 
-async function sendLogin() {
+async function sendLogin(history) {
     const username = document.getElementById('input-username').value;
     const password = document.getElementById('input-password').value;
 
@@ -29,15 +30,18 @@ async function sendLogin() {
 
         localStorage.setItem('sessionToken', content.sessionKey);
         localStorage.setItem('username', username);
-        window.location.replace(`${settings.siteDomain}/`);
+        history.push('/');
     } else {
         alert('Die angegebenen Daten sind inkorrekt.')
     }
 }
 
 function Login() {
+    const history = useHistory();
+
     const handleSubmit = (e) => {
         e.preventDefault();
+        sendLogin(history);
     };
 
     return (
@@ -55,9 +59,7 @@ function Login() {
                     </Form.Group>
                     <Form.Group className="mb-3" controlId="formBasicCheckbox">
                     </Form.Group>
-                    <Button variant="primary" type="submit" onClick={sendLogin}>
-                        Login
-                    </Button>
+                    <Button variant="primary" type="submit">Login</Button>
                     <p>Sie besitzen noch kein Konto? Klicken sie <a href="/register">hier</a>!</p>
                 </Form>
             </div>
