@@ -133,12 +133,56 @@ const multiplayerV2 = function (app) {
         fs.writeFile("./savefiles/users.json", JSON.stringify(users));
         fs.writeFile("./savefiles/matches.json", JSON.stringify(matches));
 
-        
+
         res.json({
             winner: players[winner],
             success: true,
             message: "match ended"
         })
+    })
+
+    app.post('/matches/played', (req, res) => {
+        const sessionKey = req.body.sessionKey;
+        const matchId = req.body.matchId;
+        const score = req.body.score;
+
+        if (sessions[sessionKey] === undefined) {
+            res.json({
+                success: false,
+                message: "unauthorized"
+            })
+            return;
+        }
+
+        if (matches[matchId] === undefined) {
+            res.json({
+                success: false,
+                message: "unauthorized"
+            })
+            return;
+        }
+
+        const username = sessions[sessionKey].username;
+        for (let i = 0; i < matches[matchId].scores.length; i++) {
+
+            if(matches[matchId].scores[i].username === username) {
+                res.json({
+                    success: false,
+                    message: "already submitted"
+                })
+                return;
+            }
+            
+        }
+
+        const dataset = {
+            'username': username,
+            'score': score
+        }
+        matches[matchId].scores.push(dataset)
+
+        fs.writeFile("./savefiles/matches.json", JSON.stringify(matches));
+        res.sendStatus(200);
     })
 
 }
