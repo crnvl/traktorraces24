@@ -64,7 +64,7 @@ function Races() {
         const startMatch = [];
 
         if ((auth ? auth.success : false) && auth.username === content[i].owner)
-          startMatch.push(<Button variant="primary" onClick={() => { launchMatch(content[i].id); }}>Starten</Button>)
+          startMatch.push(<Button variant="primary" onClick={() => { launchMatch(content[i].id); }}>Beenden</Button>)
 
         const participators = [];
         const playMatchButton = [];

@@ -30,6 +30,7 @@ const multiplayerV2 = function (app) {
             'price': price,
             'owner': username,
             'players': [],
+            'scores': [],
             'id': matchId
         }
 
@@ -124,8 +125,10 @@ const multiplayerV2 = function (app) {
             return;
         }
 
-        const winner = getRandomInt(players.length);
-        const winnerName = players[winner];
+
+        const highestScore = getMax(matches[matchId].scores, 'score');
+
+        const winnerName = highestScore.username;
         users[winnerName].credits = Number.parseFloat(users[winnerName].credits) + Number.parseFloat(matches[matchId].price);
 
         matches[matchId].isPrivate = true;
@@ -135,7 +138,7 @@ const multiplayerV2 = function (app) {
 
 
         res.json({
-            winner: players[winner],
+            winner: winnerName,
             success: true,
             message: "match ended"
         })
@@ -165,14 +168,14 @@ const multiplayerV2 = function (app) {
         const username = sessions[sessionKey].username;
         for (let i = 0; i < matches[matchId].scores.length; i++) {
 
-            if(matches[matchId].scores[i].username === username) {
+            if (matches[matchId].scores[i].username === username) {
                 res.json({
                     success: false,
                     message: "already submitted"
                 })
                 return;
             }
-            
+
         }
 
         const dataset = {
@@ -189,6 +192,15 @@ const multiplayerV2 = function (app) {
 
 function getRandomInt(max) {
     return Math.floor(Math.random() * max);
+}
+
+function getMax(arr, prop) {
+    var max;
+    for (var i = 0; i < arr.length; i++) {
+        if (max == null || parseInt(arr[i][prop]) > parseInt(max[prop]))
+            max = arr[i];
+    }
+    return max;
 }
 
 module.exports = multiplayerV2;

@@ -61,7 +61,7 @@ function addCredits(history) {
         if (content.success) {
             alert('Credits hinzugefuegt!')
             localStorage.removeItem('credits');
-            history.push('/account/settings');
+            window.location.replace(`${settings.siteDomain}/account/settings`);
         } else {
             alert('Oops, irgendetwas ist schiefgelaufen.')
         }

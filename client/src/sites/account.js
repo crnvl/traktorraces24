@@ -28,9 +28,9 @@ function Account() {
     return (
         <>
             <div className="container">
-                <div className="col-lg mx-auto">
+                <div className="col mx-auto" style={{ height: '600px', width: '600px'}}> 
                     <Card>
-                        <Card.Img variant="top" src={content ? content.avatar : '/images/menu/carousel3.jpg'} style={{ height: '300px', width: '100%', display: 'block', marginLeft: 'auto', marginRight: 'auto', objectFit: 'cover', overflow: 'hidden' }} />
+                        <Card.Img variant="top" src={content ? content.avatar : '/images/menu/carousel3.jpg'} style={{ height: '600px', width: '600px', display: 'block', marginLeft: 'auto', marginRight: 'auto', objectFit: 'cover', overflow: 'hidden' }} />
                         <Card.Body>
                             <Card.Title>@{content ? content.username : ''}</Card.Title>
                             <Card.Text>

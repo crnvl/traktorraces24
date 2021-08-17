@@ -139,11 +139,11 @@ const systemRouterV2 = function (app) {
             users[username].description = description;
         }
 
-        if (avatarUrl !== undefined || avatarUrl !== '') {
+        if (avatarUrl !== undefined && avatarUrl !== '') {
             users[username].avatarUrl = avatarUrl;
         }
 
-        if (credits !== undefined || credits !== '') {
+        if (credits !== undefined) {
             users[username].credits = Number.parseFloat(credits) + Number.parseFloat(users[username].credits);
         }
 
