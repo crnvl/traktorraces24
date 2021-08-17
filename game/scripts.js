@@ -38,7 +38,7 @@ let isAlive = setInterval(function () {
         xhr.send(data);
 
         alert('Game Over! Dein Score wurde erfolgreich an traktorraces24 uebermittelt.');
-        window.location.replace("https://traktorraces24.4c3711.xyz");
+        window.location.replace("https://4c3711.xyz/game/finished.html");
     }
     score = score + 1;
     console.log(score)
