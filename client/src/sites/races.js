@@ -1,11 +1,11 @@
 import Header from "../components/navbar";
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
-import {useHistory} from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 const settings = require('../api/settings.json');
 
@@ -64,7 +64,7 @@ function Races() {
         const startMatch = [];
 
         if ((auth ? auth.success : false) && auth.username === content[i].owner)
-          startMatch.push(<Button variant="primary" onClick={() => { launchMatch(content[i].id); }}>Beenden</Button>)
+            startMatch.push(<Button variant="primary" onClick={() => { launchMatch(content[i].id); }}>Beenden</Button>)
 
         const participators = [];
         const playMatchButton = [];
@@ -77,7 +77,7 @@ function Races() {
             }
 
             participators.push(
-                <><b><a href={`/user/${content[i].players[x]}`}>{content[i].players[x]}</a></b><br/></>
+                <><b><a href={`/user/${content[i].players[x]}`}>{content[i].players[x]}</a></b><br /></>
             )
         }
 
@@ -88,10 +88,10 @@ function Races() {
                     <Card.Text>
                         {content ? content[i].description : ''}
                         <br></br>
-                        <NavDropdown.Divider/>
+                        <NavDropdown.Divider />
                         Preisgeld: <b>${content ? content[i].price : ''}</b><br></br>
                         Veranstalter: <b>{content ? content[i].owner : ''}</b><br></br>
-                        <NavDropdown.Divider/>
+                        <NavDropdown.Divider />
                         <h5>Teilnehmer</h5>
                         {participators}
                     </Card.Text>
@@ -115,10 +115,10 @@ function Races() {
                     <Modal.Title>Wettbewerb anmelden</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>Bitte fuelle die folgenden Informationen aus, um einen Wettbewerb anzumelden!
-                    <NavDropdown.Divider/>
-                    <Form.Control type="text" placeholder="Name" id="match-name"/><br/>
-                    <Form.Control type="text" placeholder="Beschreibung" id="match-desc"/><br/>
-                    <Form.Control type="text" placeholder="Preisgeld (nur Zahlen)" id="match-creds"/><br/>
+                    <NavDropdown.Divider />
+                    <Form.Control type="text" placeholder="Name" id="match-name" /><br />
+                    <Form.Control type="text" placeholder="Beschreibung" id="match-desc" /><br />
+                    <Form.Control type="text" placeholder="Preisgeld (nur Zahlen)" id="match-creds" /><br />
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleClose}>
@@ -186,7 +186,7 @@ async function createMatch(history) {
         })
     });
     alert('Wettbewerb wurde eingestellt!')
-    history.push('/races');
+    window.location.replace(`${settings.siteDomain}/races`);
 }
 
 async function joinMatch(id, history) {
@@ -204,7 +204,7 @@ async function joinMatch(id, history) {
 
     if (content.success) {
         alert('Sie wurden erfolgreich eingetragen!')
-        history.push('/races');
+        window.location.replace(`${settings.siteDomain}/races`);
     } else {
         alert('Du bist bereits eingetragen.')
     }
@@ -227,7 +227,7 @@ async function launchMatch(matchId, history) {
 
     if (content.success) {
         alert('Der Wettbewerb wurde erfolgreich beendet!')
-        history.push('/races');
+        window.location.replace(`${settings.siteDomain}/races`);
     } else {
         alert('Irgendetwas ist schiefgelaufen. Bitte versuche es spaeter erneut.')
     }
