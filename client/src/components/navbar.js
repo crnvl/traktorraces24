@@ -5,10 +5,10 @@ import NavDropdown from 'react-bootstrap/NavDropdown';
 
 function Header(props) {
 
-    const doLogout = props.location;
+    const doLogout = window.location;
     let username = props.username;
 
-    if (doLogout === '?do=logout') {
+    if (doLogout.toString().endsWith('/?do=logout')) {
         localStorage.clear();
         username = '';
     }

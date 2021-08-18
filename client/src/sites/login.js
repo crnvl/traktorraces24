@@ -30,7 +30,7 @@ async function sendLogin(history) {
 
         localStorage.setItem('sessionToken', content.sessionKey);
         localStorage.setItem('username', username);
-        history.push('/');
+        window.location.replace(`${settings.siteDomain}/`);
     } else {
         alert('Die angegebenen Daten sind inkorrekt.')
     }
